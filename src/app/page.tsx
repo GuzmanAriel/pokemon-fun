@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import Link from "next/link"; // Import Link for navigation
 import { useGetPokemonQuery } from "../store/pokemonApi";
 import { useForm } from "react-hook-form";
 
@@ -9,15 +10,15 @@ interface FormData {
 }
 
 export default function Home() {
-  const { register, handleSubmit } = useForm<FormData>(); // Ensure react-hook-form knows the type
+  const { register, handleSubmit } = useForm<FormData>();
   const [pokemonName, setPokemonName] = useState("");
 
   const { data, error, isLoading } = useGetPokemonQuery(pokemonName, {
     skip: !pokemonName,
   });
 
-  const onSubmit = (data: FormData) => {
-    setPokemonName(data.name.toLowerCase());
+  const onSubmit = (formData: FormData) => {
+    setPokemonName(formData.name.toLowerCase());
   };
 
   // 🔊 Play Pokémon cry when data is successfully loaded
@@ -26,7 +27,7 @@ export default function Home() {
       const audio = new Audio(data.cries.latest);
       audio.play().catch((err) => console.error("Error playing sound:", err));
     }
-  }, [data]); // Runs every time `data` changes
+  }, [data]);
 
   return (
     <div className="p-4">
@@ -46,7 +47,11 @@ export default function Home() {
       {error && <p>Error fetching data</p>}
       {data && (
         <div>
-          <h2 className="text-xl font-semibold">{data.name}</h2>
+          <h2 className="text-xl font-semibold">
+            <Link href={`/pokemon/${data.name}`} className="text-blue-500 underline">
+              {data.name}
+            </Link>
+          </h2>
           <p>Height: {data.height}</p>
           <p>Weight: {data.weight}</p>
           <img src={data.sprites.front_default} alt={data.name} />
