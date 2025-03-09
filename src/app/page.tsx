@@ -1,10 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Link from "next/link"; // Import Link for navigation
+import Link from "next/link"; 
 import { useGetPokemonQuery } from "../store/pokemonApi";
 import { useForm } from "react-hook-form";
 
-// Define the form data type
+
 interface FormData {
   name: string;
 }
@@ -21,7 +21,7 @@ export default function Home() {
     setPokemonName(formData.name.toLowerCase());
   };
 
-  // 🔊 Play Pokémon cry when data is successfully loaded
+  // Play Pokémon cry when data is successfully loaded
   useEffect(() => {
     if (data?.cries?.latest) {
       const audio = new Audio(data.cries.latest);
